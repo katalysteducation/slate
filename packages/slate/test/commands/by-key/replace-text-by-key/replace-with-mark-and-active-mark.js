@@ -27,10 +27,7 @@ export const output = (
   <value>
     <document>
       <paragraph>
-        Meow,{' '}
-        <i>
-          <b>cat is cute</b>
-        </i>
+        Meow, <i>cat is cute</i>
         <b>
           <cursor />d.
         </b>

@@ -4,12 +4,14 @@ import Types from 'prop-types'
 import getWindow from 'get-window'
 import warning from 'tiny-warning'
 import throttle from 'lodash/throttle'
+import omit from 'lodash/omit'
 import { List } from 'immutable'
 import {
   IS_ANDROID,
   IS_FIREFOX,
   HAS_INPUT_EVENTS_LEVEL_2,
 } from 'slate-dev-environment'
+import Hotkeys from 'slate-hotkeys'
 
 import EVENT_HANDLERS from '../constants/event-handlers'
 import DATA_ATTRS from '../constants/data-attributes'
@@ -56,6 +58,7 @@ class Content extends React.Component {
     contentKey: Types.number,
     editor: Types.object.isRequired,
     id: Types.string,
+    onEvent: Types.func.isRequired,
     readOnly: Types.bool.isRequired,
     role: Types.string,
     spellCheck: Types.bool.isRequired,
@@ -101,6 +104,8 @@ class Content extends React.Component {
     isUpdatingSelection: false,
     nodeRef: React.createRef(),
     nodeRefs: {},
+    contentKey: 0,
+    nativeSelection: {}, // Native selection object stored to check if `onNativeSelectionChange` has triggered yet
   }
 
   /**
@@ -194,6 +199,7 @@ class Content extends React.Component {
     debug.update('componentDidUpdate')
 
     this.updateSelection()
+    this.props.editor.clearUserActionPerformed()
 
     this.props.onEvent('onComponentDidUpdate')
   }
@@ -211,7 +217,7 @@ class Content extends React.Component {
     const native = window.getSelection()
     const { activeElement } = window.document
 
-    if (debug.enabled) {
+    if (debug.update.enabled) {
       debug.update('updateSelection', { selection: selection.toJSON() })
     }
 
@@ -233,7 +239,35 @@ class Content extends React.Component {
 
     // If the Slate selection is unset, but the DOM selection has a range
     // selected in the editor, we need to remove the range.
-    if (selection.isUnset && rangeCount && this.isInEditor(anchorNode)) {
+    // However we should _not_ remove the range if the selection as
+    // reported by `getSelection` is not equal to `this.tmp.nativeSelection`
+    // as this suggests `onNativeSelectionChange` has not triggered yet (which can occur in Firefox)
+    // See: https://github.com/ianstormtaylor/slate/pull/2995
+
+    const propsToCompare = [
+      'anchorNode',
+      'anchorOffset',
+      'focusNode',
+      'focusOffset',
+      'isCollapsed',
+      'rangeCount',
+      'type',
+    ]
+
+    let selectionsEqual = true
+
+    for (const prop of propsToCompare) {
+      if (this.tmp.nativeSelection[prop] !== native[prop]) {
+        selectionsEqual = false
+      }
+    }
+
+    if (
+      selection.isUnset &&
+      rangeCount &&
+      this.isInEditor(anchorNode) &&
+      selectionsEqual
+    ) {
       removeAllRanges(native)
       updated = true
     }
@@ -248,7 +282,7 @@ class Content extends React.Component {
 
     // Otherwise, figure out which DOM nodes should be selected...
     if (selection.isFocused && selection.isSet) {
-      const current = !!rangeCount && native.getRangeAt(0)
+      const current = !!native.rangeCount && native.getRangeAt(0)
       const range = editor.findDOMRange(selection)
 
       if (!range) {
@@ -309,8 +343,11 @@ class Content extends React.Component {
         native.addRange(range)
       }
 
-      // Scroll to the selection, in case it's out of view.
-      scrollToSelection(native)
+      // Only scroll to selection when a user action is performed
+      if (editor.userActionPerformed() === true) {
+        // Scroll to the selection, in case it's out of view.
+        scrollToSelection(native)
+      }
 
       // Then unset the `isUpdatingSelection` flag after a delay, to ensure that
       // it is still set when selection-related events from updating it fire.
@@ -322,12 +359,23 @@ class Content extends React.Component {
         }
 
         this.tmp.isUpdatingSelection = false
+
+        debug.update('updateSelection:setTimeout', {
+          anchorOffset: window.getSelection().anchorOffset,
+        })
       })
     }
 
-    if (updated && debug.enabled) {
+    if (updated && (debug.enabled || debug.update.enabled)) {
       debug('updateSelection', { selection, native, activeElement })
-      debug.update('updateSelection-applied', { selection })
+
+      debug.update('updateSelection:applied', {
+        selection: selection.toJSON(),
+        native: {
+          anchorOffset: native.anchorOffset,
+          focusOffset: native.focusOffset,
+        },
+      })
     }
   }
 
@@ -382,10 +430,15 @@ class Content extends React.Component {
   onEvent(handler, event) {
     debug('onEvent', handler)
 
+    const nativeEvent = event.nativeEvent || event
+    const isUndoRedo =
+      event.type === 'keydown' &&
+      (Hotkeys.isUndo(nativeEvent) || Hotkeys.isRedo(nativeEvent))
+
     // Ignore `onBlur`, `onFocus` and `onSelect` events generated
     // programmatically while updating selection.
     if (
-      this.tmp.isUpdatingSelection &&
+      (this.tmp.isUpdatingSelection || isUndoRedo) &&
       (handler === 'onSelect' || handler === 'onBlur' || handler === 'onFocus')
     ) {
       return
@@ -470,7 +523,24 @@ class Content extends React.Component {
 
     const window = getWindow(event.target)
     const { activeElement } = window.document
+
+    const native = window.getSelection()
+
+    debug.update('onNativeSelectionChange', {
+      anchorOffset: native.anchorOffset,
+    })
+
     if (activeElement !== this.ref.current) return
+
+    this.tmp.nativeSelection = {
+      anchorNode: native.anchorNode,
+      anchorOffset: native.anchorOffset,
+      focusNode: native.focusNode,
+      focusOffset: native.focusOffset,
+      isCollapsed: native.isCollapsed,
+      rangeCount: native.rangeCount,
+      type: native.type,
+    }
 
     this.props.onEvent('onSelect', event)
   }, 100)
@@ -512,7 +582,10 @@ class Content extends React.Component {
       ...props.style,
     }
 
+    // console.log('rerender content', this.tmp.contentKey, document.text)
+
     debug('render', { props })
+    debug.update('render', this.tmp.contentKey, document.text)
 
     this.props.onEvent('onRender')
 
@@ -521,9 +594,12 @@ class Content extends React.Component {
       [DATA_ATTRS.KEY]: document.key,
     }
 
+    const domProps = omit(this.props, Object.keys(Content.propTypes))
+
     return (
       <Container
-        key={this.props.contentKey}
+        {...domProps}
+        key={this.tmp.contentKey}
         {...handlers}
         {...data}
         ref={this.setRef}
@@ -539,7 +615,9 @@ class Content extends React.Component {
         // COMPAT: The Grammarly Chrome extension works by changing the DOM out
         // from under `contenteditable` elements, which leads to weird behaviors
         // so we have to disable it like this. (2017/04/24)
-        data-gramm={false}
+
+        // just the existence of the flag is disabling the extension irrespective of its value
+        data-gramm={domProps['data-gramm'] ? undefined : false}
       >
         <Node
           annotations={value.annotations}

@@ -5,9 +5,11 @@ import Types from 'prop-types'
 import invariant from 'tiny-invariant'
 import memoizeOne from 'memoize-one'
 import warning from 'tiny-warning'
+import omit from 'lodash/omit'
 import { Editor as Controller } from 'slate'
 
 import EVENT_HANDLERS from '../constants/event-handlers'
+import OTHER_HANDLERS from '../constants/other-handlers'
 import Content from './content'
 import ReactPlugin from '../plugins/react'
 
@@ -50,6 +52,10 @@ class Editor extends React.Component {
     tabIndex: Types.number,
     value: SlateTypes.value,
     ...EVENT_HANDLERS.reduce((obj, handler) => {
+      obj[handler] = Types.func
+      return obj
+    }, {}),
+    ...OTHER_HANDLERS.reduce((obj, handler) => {
       obj[handler] = Types.func
       return obj
     }, {}),
@@ -174,8 +180,11 @@ class Editor extends React.Component {
       tagName,
     } = this.props
 
+    const domProps = omit(this.props, Object.keys(Editor.propTypes))
+
     const children = (
       <Content
+        {...domProps}
         ref={this.tmp.contentRef}
         autoCorrect={autoCorrect}
         className={className}
