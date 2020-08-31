@@ -45,6 +45,21 @@ It can do this because all of its logic is implemented with a series of plugins,
 
 <br/>
 
+### This fork
+
+This fork is based on Slate 0.58.4 with following PRs merged:
+
+- [#3437](https://github.com/ianstormtaylor/slate/pull/3437) Fix element memoization checks. Allows placeholder to change dynamically based on the props. Allows renderLeaf to be memoized.
+- [#3799](https://github.com/ianstormtaylor/slate/pull/3799) Collapse selection according to reverse
+- [#3850](https://github.com/ianstormtaylor/slate/pull/3850) Upgrade immer to 7.0.0
+- [#3851](https://github.com/ianstormtaylor/slate/pull/3851) Normalize moved node
+
+Packages are published using [gitpkg](https://github.com/ramasilveyra/gitpkg). Current versions are:
+
+- slate: `openstax-poland/slate#slate-v0.58.4-1-gitpkg`
+- slate-history: `openstax-poland/slate#slate-history-v0.58.4-1-gitpkg`
+- slate-react: `openstax-poland/slate#slate-react-v0.58.4-1-gitpkg`
+
 ### Why?
 
 Why create Slate? Well... _(Beware: this section has a few of [my](https://github.com/ianstormtaylor) opinions!)_
