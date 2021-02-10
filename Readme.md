@@ -47,18 +47,17 @@ It can do this because all of its logic is implemented with a series of plugins,
 
 ### This fork
 
-This fork is based on Slate 0.59.0 with following PRs merged:
+This fork is based on Slate 0.60.3 with following PRs merged:
 
 - [#3437](https://github.com/ianstormtaylor/slate/pull/3437) Fix element memoization checks. Allows placeholder to change dynamically based on the props. Allows renderLeaf to be memoized.
 - [#3799](https://github.com/ianstormtaylor/slate/pull/3799) Collapse selection according to reverse
-- [#3850](https://github.com/ianstormtaylor/slate/pull/3850) Upgrade immer to 7.0.0
 - [#3851](https://github.com/ianstormtaylor/slate/pull/3851) Normalize moved node
 
 Packages are published using [gitpkg](https://github.com/ramasilveyra/gitpkg). Current versions are:
 
-- slate: `openstax-poland/slate#slate-v0.59.0-1-gitpkg`
-- slate-history: `openstax-poland/slate#slate-history-v0.59.0-1-gitpkg`
-- slate-react: `openstax-poland/slate#slate-react-v0.59.0-1-gitpkg`
+- slate: `openstax-poland/slate#slate-v0.60.3-1-gitpkg`
+- slate-history: `openstax-poland/slate#slate-history-v0.60.3-1-gitpkg`
+- slate-react: `openstax-poland/slate#slate-react-v0.60.3-1-gitpkg`
 
 ### Why?
 
@@ -118,15 +117,15 @@ Check out the [**live demo**](http://slatejs.org) of all of the examples!
 
 To get a sense for how you might use Slate, check out a few of the examples:
 
-- [**Plain text**](https://github.com/ianstormtaylor/slate/tree/master/site/examples/plaintext.js) — showing the most basic case: a glorified `<textarea>`.
-- [**Rich text**](https://github.com/ianstormtaylor/slate/tree/master/site/examples/richtext.js) — showing the features you'd expect from a basic editor.
-- [**Markdown preview**](https://github.com/ianstormtaylor/slate/tree/master/site/examples/markdown-preview.js) — showing how to add key handlers for Markdown-like shortcuts.
-- [**Links**](https://github.com/ianstormtaylor/slate/tree/master/site/examples/links.js) — showing how wrap text in inline nodes with associated data.
-- [**Images**](https://github.com/ianstormtaylor/slate/tree/master/site/examples/images.js) — showing how to use void (text-less) nodes to add images.
-- [**Hovering toolbar**](https://github.com/ianstormtaylor/slate/tree/master/site/examples/hovering-toolbar.js) — showing how a hovering toolbar can be implemented.
-- [**Tables**](https://github.com/ianstormtaylor/slate/tree/master/site/examples/tables.js) — showing how to nest blocks to render more advanced components.
-- [**Paste HTML**](https://github.com/ianstormtaylor/slate/tree/master/site/examples/paste-html.js) — showing how to use an HTML serializer to handle pasted HTML.
-- [**Mentions**](https://github.com/ianstormtaylor/slate/tree/master/site/examples/mentions.js) — showing how to use inline void nodes for simple @-mentions.
+- [**Plain text**](https://github.com/ianstormtaylor/slate/tree/master/site/examples/plaintext.tsx) — showing the most basic case: a glorified `<textarea>`.
+- [**Rich text**](https://github.com/ianstormtaylor/slate/tree/master/site/examples/richtext.tsx) — showing the features you'd expect from a basic editor.
+- [**Markdown preview**](https://github.com/ianstormtaylor/slate/tree/master/site/examples/markdown-preview.tsx) — showing how to add key handlers for Markdown-like shortcuts.
+- [**Links**](https://github.com/ianstormtaylor/slate/tree/master/site/examples/links.tsx) — showing how wrap text in inline nodes with associated data.
+- [**Images**](https://github.com/ianstormtaylor/slate/tree/master/site/examples/images.tsx) — showing how to use void (text-less) nodes to add images.
+- [**Hovering toolbar**](https://github.com/ianstormtaylor/slate/tree/master/site/examples/hovering-toolbar.tsx) — showing how a hovering toolbar can be implemented.
+- [**Tables**](https://github.com/ianstormtaylor/slate/tree/master/site/examples/tables.tsx) — showing how to nest blocks to render more advanced components.
+- [**Paste HTML**](https://github.com/ianstormtaylor/slate/tree/master/site/examples/paste-html.tsx) — showing how to use an HTML serializer to handle pasted HTML.
+- [**Mentions**](https://github.com/ianstormtaylor/slate/tree/master/site/examples/mentions.tsx) — showing how to use inline void nodes for simple @-mentions.
 - [**See all the examples...**](https://github.com/ianstormtaylor/slate/tree/master/site/examples/)
 
 If you have an idea for an example that shows a common use case, pull request it!
