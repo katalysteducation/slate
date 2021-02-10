@@ -1,0 +1,1 @@
+{"version":3,"file":"custom-types.d.ts","sourceRoot":"","sources":["packages/slate-react/src/custom-types.ts"],"names":[],"mappings":"AAEA,OAAO,QAAQ,OAAO,CAAC;IACrB,UAAU,WAAW;QACnB,IAAI,EAAE;YACJ,WAAW,EAAE,MAAM,CAAA;SACpB,CAAA;QACD,KAAK,EAAE;YACL,WAAW,CAAC,EAAE,MAAM,CAAA;SACrB,CAAA;KACF;CACF"}
