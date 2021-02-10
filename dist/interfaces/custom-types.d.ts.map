@@ -1,0 +1,1 @@
+{"version":3,"file":"custom-types.d.ts","sourceRoot":"","sources":["../packages/slate/src/interfaces/custom-types.ts"],"names":[],"mappings":"AAAA;;GAEG;AAEH,MAAM,WAAW,WAAW;IAC1B,CAAC,GAAG,EAAE,MAAM,GAAG,OAAO,CAAA;CACvB;AAED,oBAAY,YAAY,CAAC,CAAC,SAAS,MAAM,EAAE,CAAC,IAAI,OAAO,SAAS,WAAW,CAAC,CAAC,CAAC,GAC1E,CAAC,GACD,CAAC,GAAG,WAAW,CAAC,CAAC,CAAC,CAAA"}
