@@ -55,11 +55,11 @@ This fork is based on Slate 0.59.0 with following PRs merged:
 - [#3851](https://github.com/ianstormtaylor/slate/pull/3851) Normalize moved node
 - [#4347](https://github.com/ianstormtaylor/slate/pull/4347) Re-render leaf when new properties were added to it
 
-Packages are published using [gitpkg](https://github.com/ramasilveyra/gitpkg). Current versions are:
+Packages are published using [gitpub](https://github.com/openstax-poland/gitpub). Current versions are:
 
 - slate: `openstax-poland/slate#slate-v0.59.0-1-gitpkg`
 - slate-history: `openstax-poland/slate#slate-history-v0.59.0-1-gitpkg`
-- slate-react: `openstax-poland/slate#slate-react-v0.59.0-1-gitpkg`
+- slate-react: `openstax-poland/slate#gitpub/slate-react@0.59.1`
 
 ### Why?
 
