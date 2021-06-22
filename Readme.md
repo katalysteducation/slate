@@ -53,6 +53,7 @@ This fork is based on Slate 0.59.0 with following PRs merged:
 - [#3799](https://github.com/ianstormtaylor/slate/pull/3799) Collapse selection according to reverse
 - [#3850](https://github.com/ianstormtaylor/slate/pull/3850) Upgrade immer to 7.0.0
 - [#3851](https://github.com/ianstormtaylor/slate/pull/3851) Normalize moved node
+- [#4347](https://github.com/ianstormtaylor/slate/pull/4347) Re-render leaf when new properties were added to it
 
 Packages are published using [gitpkg](https://github.com/ramasilveyra/gitpkg). Current versions are:
 
